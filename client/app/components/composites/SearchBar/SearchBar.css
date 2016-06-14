@@ -24,11 +24,33 @@
   /* stylelint-enable selector-class-pattern */
 }
 
+.mobileMenuOpen {} /* stylelint-disable-line block-no-empty */
+
+.root {
+  height: 100%;
+}
+
 .form {
-  display: inline-flex;
-  width: 28.3em;
+  display: none;
   position: relative;
+  margin-top: 1.2em; /* center vertically within Topbar */
   padding-left: var(--SearchBar_sidePadding);
+  z-index: 1; /* TODO: move to var */
+
+  @nest .mobileMenuOpen & {
+    display: flex;
+    position: absolute;
+    left: 0;
+    right: 0;
+    background-color: #34495e;
+    margin-top: 0;
+  }
+
+  /* TODO: custom media query */
+  @media (min-width: 40em) {
+    display: inline-flex;
+    width: 28.3em;
+  }
 
   &:hover .focusContainer::before {
     border-color: var(--SearchBar_borderColorActive);
@@ -45,6 +67,7 @@
    anything within it has focus, we have to create a special container
    for the focus styles to cover the whole form area. */
 .focusContainer::before {
+  display: none;
   content: '';
   position: absolute;
   top: 0;
@@ -52,9 +75,14 @@
   right: 0;
   bottom: 0;
   border: 1px solid var(--SearchBar_borderColor);
-  border-radius: 10em; /* Big enough to be fully rounded */
   z-index: var(--SearchBar_focusContainerZIndex); /* Required to allow mouse event to the inputs/buttons. */
   transition: border-color 0.1s ease-in;
+
+  /* TODO: custom media query */
+  @media (min-width: 40em) {
+    display: block;
+    border-radius: 10em; /* Big enough to be fully rounded */
+  }
 }
 
 .keywordInput,
@@ -63,12 +91,16 @@
   padding: 0;
   line-height: var(--SearchBar_lineHeight);
   border: none;
-  color: var(--SearchBar_textColor);
+  color: #fff; /* TODO: get from var */
   transition: color 0.1s ease-in;
   font-weight: var(--SearchBar_inputFontWeight);
   z-index: var(--SearchBar_childZIndex);
 
   -webkit-font-smoothing: antialiased;
+
+  @nest .mobileMenuOpen & {
+    background-color: #34495e;
+  }
 
   &:only-of-type {
     width: 100%;
@@ -80,31 +112,35 @@
     }
   }
 
-  &::placeholder {
+  @media (min-width: 40em) {
     color: var(--SearchBar_textColor);
-    transition: color 0.1s ease-in;
-  }
-
-  @nest .form:hover & {
-    color: var(--SearchBar_textColorActive);
 
     &::placeholder {
+      color: var(--SearchBar_textColor);
+      transition: color 0.1s ease-in;
+    }
+
+    @nest .form:hover & {
       color: var(--SearchBar_textColorActive);
+
+      &::placeholder {
+        color: var(--SearchBar_textColorActive);
+      }
+
+      &:focus {
+        /* focus color should override the active color */
+        color: var(--SearchBar_textColorFocus);
+      }
     }
 
     &:focus {
-      /* focus color should override the active color */
+      outline: none;
       color: var(--SearchBar_textColorFocus);
-    }
-  }
 
-  &:focus {
-    outline: none;
-    color: var(--SearchBar_textColorFocus);
-
-    /* Trigger focus styles for the search icon SVG when these inputs have focus. */
-    & ~ .searchButton svg {
-      stroke: var(--SearchBar_iconColorActive);
+      /* Trigger focus styles for the search icon SVG when these inputs have focus. */
+      & ~ .searchButton svg {
+        stroke: var(--SearchBar_iconColorActive);
+      }
     }
   }
 }
@@ -150,6 +186,10 @@
   cursor: pointer;
   z-index: var(--SearchBar_childZIndex);
 
+  &:hover {
+    background-color: transparent;
+  }
+
   & svg {
     line-height: 1;
     width: 1em;
@@ -177,5 +217,26 @@
       stroke: var(--SearchBar_iconColorFocus);
       outline: 1px solid var(--SearchBar_borderColor);
     }
+  }
+}
+
+.mobileToggle {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  width: 5em;
+  height: 100%;
+  background-color: transparent;
+  border: none;
+  stroke: #000;
+  cursor: pointer;
+
+  &:hover {
+    background-color: transparent;
+  }
+
+  /* TODO: custom media query */
+  @media (min-width: 40em) {
+    display: none;
   }
 }

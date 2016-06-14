@@ -30,12 +30,6 @@
     font-family: var(--topbarFontFamily);
     font-size: var(--topbarFontSize);
   }
-
-  & button {
-    &:hover {
-      background: none;
-    }
-  }
 }
 
 .topbarLogo {

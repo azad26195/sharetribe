@@ -1,7 +1,7 @@
 /* eslint-disable react/no-set-state */
 
 import { Component, PropTypes } from 'react';
-import { form, input, button, span } from 'r-dom';
+import { form, input, button, span, div } from 'r-dom';
 
 import css from './SearchBar.css';
 import icon from './images/search-icon.svg';
@@ -24,8 +24,8 @@ const coordinates = (place) => {
 
 const getDetails = (placeId) => new Promise((resolve, reject) => {
   const serviceStatus = window.google.maps.places.PlacesServiceStatus;
-  const div = document.createElement('div');
-  const service = new window.google.maps.places.PlacesService(div);
+  const el = document.createElement('div');
+  const service = new window.google.maps.places.PlacesService(el);
 
   service.getDetails({ placeId }, (place, status) => {
     if (status !== serviceStatus.OK) {
@@ -57,11 +57,17 @@ class SearchBar extends Component {
 
     // Bind `this` within methods
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleResize = this.handleResize.bind(this);
 
-    this.state = { selectedPlace: null };
+    this.state = {
+      selectedPlace: null,
+      mobileMenu: false,
+    };
   }
   componentDidMount() {
     document.body.classList.add(css.topLevelBody);
+    window.addEventListener('resize', this.handleResize);
+
     if (!this.locationInput) {
       return;
     }
@@ -76,6 +82,7 @@ class SearchBar extends Component {
   }
   componentWillUnmount() {
     document.body.classList.remove(css.topLevelBody);
+    window.removeEventListener('resize', this.handleResize);
 
     if (this.placeChangedListener) {
       this.placeChangedListener.remove();
@@ -87,6 +94,9 @@ class SearchBar extends Component {
     if (container) {
       document.body.removeChild(container);
     }
+  }
+  handleResize() {
+    this.setState({ mobileMenu: false });
   }
   handleSubmit() {
     if (!this.keywordInput && !this.locationInput) {
@@ -179,21 +189,34 @@ class SearchBar extends Component {
     const hasKeywordInput = mode === SEARCH_MODE_KEYWORD || mode === SEARCH_MODE_KEYWORD_AND_LOCATION;
     const hasLocationInput = mode === SEARCH_MODE_LOCATION || mode === SEARCH_MODE_KEYWORD_AND_LOCATION;
 
-    return form({
-      classSet: { [css.form]: true },
-      onSubmit: (e) => {
-        e.preventDefault();
-        this.handleSubmit();
+    return div({
+      className: css.root,
+      classSet: {
+        [css.root]: true,
+        [css.mobileMenuOpen]: this.state.mobileMenu,
       },
     }, [
-      hasKeywordInput ? keywordInput : null,
-      hasLocationInput ? locationInput : null,
       button({
-        type: 'submit',
-        className: css.searchButton,
+        className: css.mobileToggle,
+        onClick: () => this.setState({ mobileMenu: !this.state.mobileMenu }),
         dangerouslySetInnerHTML: { __html: icon },
       }),
-      span({ className: css.focusContainer }),
+      form({
+        classSet: { [css.form]: true },
+        onSubmit: (e) => {
+          e.preventDefault();
+          this.handleSubmit();
+        },
+      }, [
+        hasKeywordInput ? keywordInput : null,
+        hasLocationInput ? locationInput : null,
+        button({
+          type: 'submit',
+          className: css.searchButton,
+          dangerouslySetInnerHTML: { __html: icon },
+        }),
+        span({ className: css.focusContainer }),
+      ]),
     ]);
   }
 }
