@@ -91,9 +91,9 @@
 .locationInput {
   display: inline-block;
   width: 0;
-  margin: var(--SearchBar_textPadding) 0 var(--SearchBar_textPadding) 0;
+  margin: var(--SearchBar_textPadding) 0;
   padding: 0;
-  line-height: 4.3; /* TODO: move to var */
+  line-height: 2.9; /* TODO: move to var */
   /* line-height: var(--SearchBar_lineHeight); */
   border: none;
   color: #fff; /* TODO: get from var */
@@ -103,6 +103,7 @@
   flex-grow: 1;
   /* flex-basis: 50%; */
   transition: flex-grow 0.25s ease-out;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 
   -webkit-font-smoothing: antialiased;
 
@@ -125,9 +126,9 @@
     }
   }
 
-    &::placeholder {
-      color: #fff;
-    }
+  &::placeholder {
+    color: #fff;
+  }
 
   /* @media (min-width: 40em) { */
   /*   color: var(--SearchBar_textColor); */
@@ -171,6 +172,11 @@
 
     & ~ .locationInput {
       /* width: calc(100% - var(--SearchBar_keywordInputFocusWidth)); */
+      margin-right: var(--SearchBar_inputButtonMargin);
+    }
+
+    & ~ .searchButton {
+      box-shadow: -1em 0 3em -1em #000;
     }
   }
 }
@@ -183,8 +189,8 @@
    next to each other. */
 .keywordInput + .locationInput {
   /* border-left: 1px solid var(--SearchBar_borderColor); */
-  padding-left: calc(2 * var(--SearchBar_textPadding));
-  margin-right: var(--SearchBar_inputButtonMargin);
+  margin-left: calc(2 * var(--SearchBar_textPadding));
+  margin-right: calc(var(--SearchBar_inputButtonMargin) + 2 * var(--SearchBar_textPadding));
 }
 
 .searchButton {
@@ -194,13 +200,14 @@
   right: 0;
   bottom: 0;
   margin: 0;
-  padding: 0 var(--SearchBar_sidePadding);
-  padding-top: 2px; /* Fix position. */
+  padding: 0;
+  /* padding: 0 var(--SearchBar_sidePadding); */
+  /* padding-top: 2px; /\* Fix position. *\/ */
   line-height: var(--SearchBar_searchButtonLineHeight);
   border: none;
   /* background-color: transparent; */
   background-color: #2C3e50;
-  width: 5em;
+  width: 4em;
   cursor: pointer;
   z-index: var(--SearchBar_childZIndex);
 
@@ -211,16 +218,17 @@
   &::before {
     content: '';
     position: absolute;
-    top: -16px;
-    right: 2em;
-    border: 8px solid transparent;
+    top: -1.17em;
+    right: 1.4em;
+    border: 0.6em solid transparent;
     border-bottom-color: #2C3e50;
   }
 
   & svg {
     line-height: 1;
-    width: 1em;
-    height: 1em;
+    width: 1.6em;
+    height: 1.6em;
+    margin-top: 1em;
     stroke: #fff;
     /* stroke: var(--SearchBar_iconColor); */
     /* transition: stroke 0.1s ease-in; */
@@ -252,7 +260,7 @@
   display: inline-block;
   margin: 0;
   padding: 0;
-  width: 5em;
+  width: 4em;
   height: 100%;
   background-color: transparent;
   border: none;
@@ -261,6 +269,11 @@
 
   &:hover {
     background-color: transparent;
+  }
+
+  & svg {
+    width: 1.6em;
+    height: 1.6em;
   }
 
   /* TODO: custom media query */

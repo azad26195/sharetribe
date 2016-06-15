@@ -103,6 +103,8 @@ class SearchBar extends Component {
       throw new Error('No input refs saved to submit SearchBar form');
     }
 
+    this.setState({ mobileMenu: false });
+
     const keywordValueStr = this.keywordInput ? this.keywordInput.value.trim() : '';
     const locationValueStr = this.locationInput ? this.locationInput.value.trim() : '';
 
