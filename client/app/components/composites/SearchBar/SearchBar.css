@@ -96,12 +96,11 @@
   line-height: 2.9; /* TODO: move to var */
   /* line-height: var(--SearchBar_lineHeight); */
   border: none;
-  color: #fff; /* TODO: get from var */
+  color: #fff;
   transition: color 0.1s ease-in;
   font-weight: var(--SearchBar_inputFontWeight);
   z-index: var(--SearchBar_childZIndex);
   flex-grow: 1;
-  /* flex-basis: 50%; */
   transition: flex-grow 0.25s ease-out;
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 
@@ -110,6 +109,7 @@
   &:focus {
     outline: none;
     flex-grow: 9;
+    border-color: #fff;
   }
 
   @nest .mobileMenuOpen & {
@@ -119,15 +119,20 @@
   &:only-of-type {
     width: 100%;
     padding: 0;
-    margin-right: var(--SearchBar_inputButtonMargin);
+    /* margin-right: var(--SearchBar_inputButtonMargin); */
+    margin-right: calc(var(--SearchBar_inputButtonMargin) + 2 * var(--SearchBar_textPadding));
 
     &:focus {
       width: 100%;
+
+      & ~ .searchButton {
+        box-shadow: none;
+      }
     }
   }
 
   &::placeholder {
-    color: #fff;
+    color: #FCFCFC;
   }
 
   /* @media (min-width: 40em) { */
@@ -165,7 +170,7 @@
 
 .keywordInput {
   /* width: var(--SearchBar_keywordInputWidth); */
-  padding-right: calc(2 * var(--SearchBar_textPadding));
+  margin-right: var(--SearchBar_textPadding);
 
   &:focus {
     /* width: var(--SearchBar_keywordInputFocusWidth); */
@@ -189,7 +194,7 @@
    next to each other. */
 .keywordInput + .locationInput {
   /* border-left: 1px solid var(--SearchBar_borderColor); */
-  margin-left: calc(2 * var(--SearchBar_textPadding));
+  margin-left: var(--SearchBar_textPadding);
   margin-right: calc(var(--SearchBar_inputButtonMargin) + 2 * var(--SearchBar_textPadding));
 }
 
